@@ -32,7 +32,7 @@ void myproject(
 	       input_t    X[N_NODES][N_FEATURES],
 	       input_t    Ri[N_NODES][N_EDGES],
 	       input_t    Ro[N_NODES][N_EDGES],
-	       result_t   res[N_EDGES],
+	       result_t   e[N_EDGES][1],
 	       unsigned short &const_size_in,
 	       unsigned short &const_size_out);
 

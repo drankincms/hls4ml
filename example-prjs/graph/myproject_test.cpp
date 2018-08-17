@@ -31,16 +31,21 @@ int main(int argc, char **argv)
 {
 
   //hls-fpga-machine-learning insert data
-  input_t  X_str[N_NODES][N_FEATURES] = {1,1,1,1,1,1,1,1,1,1,1,1};
-  input_t  Ri_str[N_NODES][N_EDGES] = {0,0,0,0,0,0,0,0,1,0,1,0,0,1,0,1};
-  input_t  Ro_str[N_NODES][N_EDGES] = {1,1,0,0,0,0,1,1,0,0,0,0,0,0,0,0};
+  input_t  X_str[N_NODES][N_FEATURES] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+  input_t  Ri_str[N_NODES][N_EDGES] =   {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1};
+  input_t  Ro_str[N_NODES][N_EDGES] =   {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
 
-  result_t res_str[N_EDGES] = {0};
+  result_t e_str[N_EDGES][1];
+  for(int i=0; i<N_EDGES; i++){
+    e_str[i][0]=0;
+  }
+  
+
   unsigned short size_in, size_out;
-  myproject(X_str, Ri_str, Ro_str, res_str, size_in, size_out);
+  myproject(X_str, Ri_str, Ro_str, e_str, size_in, size_out);
     
   for(int i=0; i<N_EDGES; i++){
-    std::cout << res_str[i] << " ";
+    std::cout << e_str[i][0] << " ";
   }
   std::cout << std::endl;
   

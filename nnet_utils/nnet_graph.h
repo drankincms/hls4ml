@@ -38,7 +38,7 @@ namespace nnet {
     // Layer Sizes
     static const unsigned n_node = 4;
     static const unsigned n_edge = 4;
-    static const unsigned n_input_dim = 3;
+    static const unsigned n_input_dim = 7;
     static const unsigned n_hidden_dim = 4;
     
     // Resource reuse info

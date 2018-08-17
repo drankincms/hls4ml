@@ -40,7 +40,7 @@ void myproject(
 	       input_t    X[N_NODES][N_FEATURES],
 	       input_t    Ri[N_NODES][N_EDGES],
 	       input_t    Ro[N_NODES][N_EDGES],
-	       result_t   res[N_EDGES],
+	       result_t   e[N_EDGES][1],
 	       unsigned short &const_size_in,
 	       unsigned short &const_size_out)
 {
@@ -49,8 +49,8 @@ void myproject(
 #pragma HLS ARRAY_RESHAPE variable=X complete dim=0 
 #pragma HLS ARRAY_RESHAPE variable=Ri complete dim=0 
 #pragma HLS ARRAY_RESHAPE variable=Ro complete dim=0 
-#pragma HLS ARRAY_RESHAPE variable=res complete dim=0 
-#pragma HLS INTERFACE ap_vld port=X,Ri,Ro,res
+#pragma HLS ARRAY_RESHAPE variable=e complete dim=0 
+#pragma HLS INTERFACE ap_vld port=X,Ri,Ro,e
 #pragma HLS PIPELINE 
   
   
@@ -63,9 +63,34 @@ void myproject(
   
   //hls-fpga-machine-learning insert layers
 
-  input_t B[N_EDGES][2*N_FEATURES];
-#pragma HLS ARRAY_PARTITION variable=B complete dim=0
-  nnet::compute_node_features<input_t, input_t, edge_net_config1>(X, Ri, Ro, B);
+  input_t H_logits[N_NODES][N_HIDDEN_FEATURES];
+  #pragma HLS ARRAY_PARTITION variable=H_logits complete dim=0
+  nnet::compute_batch_layer<input_t, input_t, layer_config1>(X, H_logits, w1, b1);
+
+  input_t H[N_NODES][N_HIDDEN_FEATURES];
+  #pragma HLS ARRAY_PARTITION variable=H complete dim=0
+  nnet::tanh_batch<input_t, input_t, tanh_config1>(H_logits, H);
+
+  input_t HX[N_NODES][N_FEATURES+N_HIDDEN_FEATURES];
+  #pragma HLS ARRAY_PARTITION variable=HX complete dim=0
+  nnet::merge2d<input_t, N_NODES, N_HIDDEN_FEATURES, N_FEATURES>(H, X, HX);
   
-  
+  input_t B[N_EDGES][2*(N_FEATURES+N_HIDDEN_FEATURES)];
+  #pragma HLS ARRAY_PARTITION variable=B complete dim=0
+  nnet::compute_node_features<input_t, input_t, edge_net_config1>(HX, Ri, Ro, B);
+
+  input_t layer2_logits[N_EDGES][N_HIDDEN_FEATURES];
+  #pragma HLS ARRAY_PARTITION variable=layer2_logits complete dim=0
+  nnet::compute_batch_layer<input_t, input_t, layer_config2>(B, layer2_logits, w2, b2);
+
+  input_t layer2_out[N_EDGES][N_HIDDEN_FEATURES];
+  #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
+  nnet::tanh_batch<input_t, input_t, tanh_config2>(layer2_logits, layer2_out);
+
+  input_t e_logits[N_EDGES][1];
+  #pragma HLS ARRAY_PARTITION variable=layer3_logits complete dim=0
+  nnet::compute_batch_layer<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
+
+  nnet::sigmoid_batch<input_t, input_t, sigmoid_config1>(e_logits, e);
+    
 }
