@@ -166,10 +166,10 @@ void compute_batch_layer(
     
     // Do the matrix-multiply
     for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
-    Product1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
-        if (CONFIG_T::io_type == io_serial){
+      if (CONFIG_T::io_type == io_serial){
             #pragma HLS PIPELINE
         }
+    Product1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
         cache = data[bb][ii];
         Product2: for(int jj = 0; jj < CONFIG_T::n_out; jj++) {
             if (CONFIG_T::io_type == io_serial) {
@@ -181,37 +181,39 @@ void compute_batch_layer(
         }
 
 }
-   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
+
     // Initialize accumulator with input biases
-    ResetAccum: for(int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
-        if (CONFIG_T::io_type == io_serial){
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
+      if (CONFIG_T::io_type == io_serial){
             #pragma HLS UNROLL
         }
+    ResetAccum: for(int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
         acc[bb][iacc] = (typename CONFIG_T::accum_t) biases[iacc];
     }
-}  
-   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
+   }  
+
     // Accumulate multiplication result
-    Accum1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
         if (CONFIG_T::io_type == io_serial){
             #pragma HLS PIPELINE
         }
+    Accum1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
         Accum2: for(int jj = 0; jj < CONFIG_T::n_out; jj++) {
 	    int index = ii*CONFIG_T::n_out+jj;
 	    acc[bb][jj] += mult[bb][index];
         }
       }
 }
-   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
     // Cast to "res_t" type
-    Result: for(int ires = 0; ires < CONFIG_T::n_out; ires++){
-        if (CONFIG_T::io_type == io_serial){
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
+     if (CONFIG_T::io_type == io_serial){
             #pragma HLS UNROLL
-        }
-        res[bb][ires] = (res_T) (acc[bb][ires]);
-      }    
+     }
+   Result: for(int ires = 0; ires < CONFIG_T::n_out; ires++){
+       res[bb][ires] = (res_T) (acc[bb][ires]);
+     }    
+   }
     }
-}
 }
 }
 

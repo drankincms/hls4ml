@@ -29,7 +29,7 @@ struct edge_net_config1 : nnet::edge_net_config {
         static const unsigned n_input_dim = N_FEATURES;
         static const unsigned n_hidden_dim = N_HIDDEN_FEATURES;
 
-        static const unsigned io_type = io_parallel;
+        static const unsigned io_type = nnet::io_parallel;
         static const unsigned reuse_factor = 1;
         static const unsigned n_zeros = 0;
         static const bool store_weights_in_bram = false;

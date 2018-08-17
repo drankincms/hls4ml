@@ -192,10 +192,10 @@ void  sigmoid_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CO
     int data_round;
     int index;
     for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
         if (CONFIG_T::io_type == io_serial){
             #pragma HLS PIPELINE
         }
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
         data_round = data[bb][ii]*CONFIG_T::table_size/16;
         index = data_round + 8*CONFIG_T::table_size/16;
         if (index < 0)   index = 0;
@@ -381,10 +381,10 @@ void  tanh_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFI
     int data_round;
     int index;
     for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
         if (CONFIG_T::io_type == io_serial){
             #pragma HLS PIPELINE
         }
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
         data_round = data[bb][ii]*CONFIG_T::table_size/8;
         index = data_round + 4*CONFIG_T::table_size/8;
         //std::cout << "Input: "  << data[ii] << " Round: " << data_round << " Index: " << index << std::endl;
@@ -392,8 +392,8 @@ void  tanh_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFI
         if (index > CONFIG_T::table_size-1) index = CONFIG_T::table_size-1;
         res[bb][ii] = (res_T) tanh_table[index];
     }
+    }
 }
-
 }
 
 #endif
