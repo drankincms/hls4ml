@@ -179,9 +179,9 @@ void compute_batch_layer(
 	    int index = ii*CONFIG_T::n_out+jj;
 	    mult[bb][index] = cache * weights[index];
         }
-      }
 
-
+}
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
     // Initialize accumulator with input biases
     ResetAccum: for(int iacc = 0; iacc < CONFIG_T::n_out; iacc++) {
         if (CONFIG_T::io_type == io_serial){
@@ -189,8 +189,8 @@ void compute_batch_layer(
         }
         acc[bb][iacc] = (typename CONFIG_T::accum_t) biases[iacc];
     }
-   
-
+}  
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
     // Accumulate multiplication result
     Accum1: for(int ii = 0; ii < CONFIG_T::n_in; ii++) {
         if (CONFIG_T::io_type == io_serial){
@@ -201,7 +201,8 @@ void compute_batch_layer(
 	    acc[bb][jj] += mult[bb][index];
         }
       }
-
+}
+   for (int bb = 0; bb < CONFIG_T::n_batch; bb++) {
     // Cast to "res_t" type
     Result: for(int ires = 0; ires < CONFIG_T::n_out; ires++){
         if (CONFIG_T::io_type == io_serial){
@@ -210,7 +211,7 @@ void compute_batch_layer(
         res[bb][ires] = (res_T) (acc[bb][ires]);
       }    
     }
-
+}
 }
 }
 
