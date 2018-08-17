@@ -1,0 +1,40 @@
+#ifndef PARAMETERS_H_
+#define PARAMETERS_H_
+
+#include <complex>
+#include "ap_int.h"
+#include "ap_fixed.h"
+#include "nnet_layer.h"
+#include "nnet_conv.h"
+#include "nnet_activation.h"
+#include "nnet_sublayer.h"
+#include "nnet_graph.h"
+#include "nnet_common.h"
+
+//hls-fpga-machine-learning insert numbers
+typedef ap_fixed<16,6> accum_default_t;
+typedef ap_fixed<16,6> weight_default_t;
+typedef ap_fixed<16,6> bias_default_t;
+typedef ap_fixed<16,6> input_t;
+typedef ap_fixed<16,6> result_t;
+#define N_FEATURES 3
+#define N_HIDDEN_FEATURES 4
+#define N_NODES 4
+#define N_EDGES 4
+
+//hls-fpga-machine-learning insert layer-config
+struct edge_net_config1 : nnet::edge_net_config {
+        static const unsigned n_node = N_NODES;
+        static const unsigned n_edge = N_EDGES;
+        static const unsigned n_input_dim = N_FEATURES;
+        static const unsigned n_hidden_dim = N_HIDDEN_FEATURES;
+
+        static const unsigned io_type = io_parallel;
+        static const unsigned reuse_factor = 1;
+        static const unsigned n_zeros = 0;
+        static const bool store_weights_in_bram = false;
+        typedef accum_default_t accum_t;
+        typedef bias_default_t bias_t;
+        typedef weight_default_t weight_t;
+};
+#endif 
