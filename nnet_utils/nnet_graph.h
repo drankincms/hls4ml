@@ -89,8 +89,8 @@ namespace nnet {
 	bi[ii][jj] = 0;
 	bo[ii][jj] = 0;
 	for(int kk = 0; kk < CONFIG_T::n_node; kk++) {
-	  bi[ii][jj] += Ri[kk][jj]* X[kk][jj];
-	  bo[ii][jj] += Ro[kk][jj]* X[kk][jj];
+	  bi[ii][jj] += Ri[kk][ii]* X[kk][jj];
+	  bo[ii][jj] += Ro[kk][ii]* X[kk][jj];
 	}
 	B[ii][jj] = (res_T) bo[ii][jj];
 	B[ii][CONFIG_T::n_input_dim+jj] = (res_T) bi[ii][jj];

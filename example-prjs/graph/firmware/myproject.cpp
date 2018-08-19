@@ -54,8 +54,8 @@ void myproject(
 #pragma HLS PIPELINE 
   
   
-  const_size_in   = N_NODES*N_FEATURES;
-  const_size_out  = N_EDGES;
+  const_size_in   = N_NODES*N_FEATURES+2*N_NODES*N_EDGES;
+  const_size_out  = N_EDGES*1;
   
   // ****************************************
   // NETWORK INSTANTIATION
@@ -88,7 +88,7 @@ void myproject(
   nnet::tanh_batch<input_t, input_t, tanh_config2>(layer2_logits, layer2_out);
 
   input_t e_logits[N_EDGES][1];
-  #pragma HLS ARRAY_PARTITION variable=layer3_logits complete dim=0
+  #pragma HLS ARRAY_PARTITION variable=e_logits complete dim=0
   nnet::compute_batch_layer<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
 
   nnet::sigmoid_batch<input_t, input_t, sigmoid_config1>(e_logits, e);
