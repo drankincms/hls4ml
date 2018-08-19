@@ -23,7 +23,7 @@ typedef ap_fixed<16,6> result_t;
 #define N_EDGES 4
 
 //hls-fpga-machine-learning insert layer-config
-struct edge_net_config1 : nnet::edge_net_config {
+struct graph_config1 : nnet::graph_config {
   static const unsigned n_node = N_NODES;
   static const unsigned n_edge = N_EDGES;
   static const unsigned n_input_dim = N_FEATURES+N_HIDDEN_FEATURES;
@@ -96,4 +96,5 @@ struct sigmoid_config1 : nnet::activ_config {
   static const unsigned table_size = 1024;
   static const unsigned io_type = nnet::io_parallel;
 };
+
 #endif 

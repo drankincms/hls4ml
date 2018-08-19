@@ -77,7 +77,7 @@ void myproject(
   
   input_t B[N_EDGES][2*(N_FEATURES+N_HIDDEN_FEATURES)];
   #pragma HLS ARRAY_PARTITION variable=B complete dim=0
-  nnet::compute_node_features<input_t, input_t, edge_net_config1>(HX, Ri, Ro, B);
+  nnet::compute_edge_net_features<input_t, input_t, graph_config1>(HX, Ri, Ro, B);
 
   input_t layer2_logits[N_EDGES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=layer2_logits complete dim=0
