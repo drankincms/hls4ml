@@ -175,34 +175,9 @@ void  sigmoid(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_in])
 template<class data_T, class res_T, typename CONFIG_T>
 void  sigmoid_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFIG_T::n_batch][CONFIG_T::n_in])
 {
-    // Initialize the lookup table
-    static bool initialized = false;
-    static typename CONFIG_T::table_t sigmoid_table[CONFIG_T::table_size];
-    if (!initialized)
-    {
-      init_sigmoid_table<CONFIG_T, CONFIG_T::table_size>(sigmoid_table);
-      initialized = true;
-    }
-
-    if (CONFIG_T::io_type == io_parallel){
-        #pragma HLS PIPELINE
-    }
-
-    // Index into the lookup table based on data
-    int data_round;
-    int index;
-    for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-        if (CONFIG_T::io_type == io_serial){
-            #pragma HLS PIPELINE
-        }
-    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
-        data_round = data[bb][ii]*CONFIG_T::table_size/16;
-        index = data_round + 8*CONFIG_T::table_size/16;
-        if (index < 0)   index = 0;
-        if (index > CONFIG_T::table_size-1) index = CONFIG_T::table_size-1;
-        res[bb][ii] = (res_T) sigmoid_table[index];
-    }
-    }
+  for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
+    sigmoid<data_T, res_T, CONFIG_T>(data[bb], res[bb]);
+  }
 }
 
 // *************************************************
@@ -364,34 +339,8 @@ void  tanh(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_in])
 template<class data_T, class res_T, typename CONFIG_T>
 void  tanh_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFIG_T::n_batch][CONFIG_T::n_in])
 {
-    // Initialize the lookup table
-    static bool initialized = false;
-    static typename CONFIG_T::table_t tanh_table[CONFIG_T::table_size];
-    if (!initialized)
-    {
-      init_tanh_table<CONFIG_T, CONFIG_T::table_size>(tanh_table);
-      initialized=true;
-    }
-
-    if (CONFIG_T::io_type == io_parallel){
-        #pragma HLS PIPELINE
-    }
-
-    // Index into the lookup table based on data
-    int data_round;
-    int index;
     for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-        if (CONFIG_T::io_type == io_serial){
-            #pragma HLS PIPELINE
-        }
-    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
-        data_round = data[bb][ii]*CONFIG_T::table_size/8;
-        index = data_round + 4*CONFIG_T::table_size/8;
-        //std::cout << "Input: "  << data[ii] << " Round: " << data_round << " Index: " << index << std::endl;
-        if (index < 0)   index = 0;
-        if (index > CONFIG_T::table_size-1) index = CONFIG_T::table_size-1;
-        res[bb][ii] = (res_T) tanh_table[index];
-    }
+      tanh<data_T, res_T, CONFIG_T>(data[bb], res[bb]);
     }
 }
 }

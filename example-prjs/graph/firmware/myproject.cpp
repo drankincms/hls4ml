@@ -67,7 +67,7 @@ void myproject(
 
   input_t H_logits[N_NODES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=H_logits complete dim=0
-  nnet::compute_batch_layer<input_t, input_t, layer_config1>(X, H_logits, w1, b1);
+  nnet::compute_layer_batch<input_t, input_t, layer_config1>(X, H_logits, w1, b1);
 
   input_t H[N_NODES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=H complete dim=0
@@ -83,7 +83,7 @@ void myproject(
 
   input_t layer2_logits[N_EDGES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=layer2_logits complete dim=0
-  nnet::compute_batch_layer<input_t, input_t, layer_config2>(B, layer2_logits, w2, b2);
+  nnet::compute_layer_batch<input_t, input_t, layer_config2>(B, layer2_logits, w2, b2);
 
   input_t layer2_out[N_EDGES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=layer2_out complete dim=0
@@ -91,23 +91,23 @@ void myproject(
 
   input_t e_logits[N_EDGES][1];
   #pragma HLS ARRAY_PARTITION variable=e_logits complete dim=0
-  nnet::compute_batch_layer<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
+  nnet::compute_layer_batch<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
 
   nnet::sigmoid_batch<input_t, input_t, sigmoid_config1>(e_logits, e);
 
-  /*
+  /*  
   input_t M[N_NODES][3*(N_FEATURES+N_HIDDEN_FEATURES)];
   #pragma HLS ARRAY_PARTITION variable=M complete dim=0
   nnet::compute_node_net_features<input_t, input_t, graph_config1>(HX, e, Ri, Ro, M);
- 
+
   input_t layer4_logits[N_NODES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=layer4_logits complete dim=0
-  nnet::compute_batch_layer<input_t, input_t, layer_config4>(M, layer4_logits, w4, b4);
+  nnet::compute_layer_batch<input_t, input_t, layer_config4>(M, layer4_logits, w4, b4);
 
   input_t layer4_out[N_NODES][N_HIDDEN_FEATURES];
   nnet::tanh_batch<input_t, input_t, tanh_config3>(layer4_logits, layer4_out);
 
-  nnet::compute_batch_layer<input_t, input_t, layer_config5>(layer4_out, H, w5, b5);    
+  nnet::compute_layer_batch<input_t, input_t, layer_config5>(layer4_out, H, w5, b5);    
 
   nnet::merge2d<input_t, N_NODES, N_HIDDEN_FEATURES, N_FEATURES>(H, X, HX);
 
@@ -115,7 +115,7 @@ void myproject(
 
   nnet::tanh_batch<input_t, input_t, tanh_config2>(layer2_logits, layer2_out);
 
-  nnet::compute_batch_layer<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
+  nnet::compute_layer_batch<input_t, input_t, layer_config3>(layer2_out, e_logits, w3, b3);
 
   nnet::sigmoid_batch<input_t, input_t, sigmoid_config1>(e_logits, e);
   */
