@@ -130,7 +130,7 @@ namespace nnet {
 #pragma HLS STREAM variable=Rwi depth=1
     }
 
-    // Multiply bo = Ro^T X                                                                                                                
+    // Multiply bo = Ro^T X
     // Multiply bi = Ri^T X      
     for(int ii = 0; ii < CONFIG_T::n_edge; ii++) {
       if (CONFIG_T::io_type == io_serial){
@@ -155,6 +155,8 @@ namespace nnet {
       for(int jj = 0; jj < CONFIG_T::n_edge; ii++) {
 	Rwo[ii][jj] = Ro[ii][jj]*e[jj][0];
 	Rwi[ii][jj] = Ri[ii][jj]*e[jj][0];
+	//std::cout << "Rwo[" << ii << "][" << jj << "] = " << Rwo[ii][jj] << std::endl;
+	//std::cout << "Rwi[" << ii << "][" << jj << "] = " << Rwi[ii][jj] << std::endl;
       }
     }
 
@@ -167,6 +169,8 @@ namespace nnet {
       for(int jj = 0; jj < CONFIG_T::n_input_dim; jj++) {
 	mi[ii][jj] = 0;
 	mo[ii][jj] = 0;
+	//std::cout << "mi[ii][jj] = " << mi[ii][jj] << std::endl;
+	//std::cout << "mo[ii][jj] = " << mo[ii][jj] << std::endl;
 	for(int kk = 0; kk < CONFIG_T::n_edge; kk++) {
 	  mi[ii][jj] += Rwi[ii][kk]* bo[kk][jj];
 	  mo[ii][jj] += Rwo[ii][kk]* bi[kk][jj];
