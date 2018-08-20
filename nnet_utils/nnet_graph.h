@@ -148,20 +148,13 @@ namespace nnet {
 
     // Hadamard Multiply Rwo = Ro * e
     // Hadamard Multiply Rwi = Ri * e      
-    std::cout << "n_node = " << CONFIG_T::n_node << std::endl;
-    std::cout << "n_edge = " << CONFIG_T::n_edge << std::endl;
-    std::cout << "n_input_dim = " << CONFIG_T::n_input_dim << std::endl;
     for(int ii = 0; ii < CONFIG_T::n_node; ii++) {
       if (CONFIG_T::io_type == io_serial){
 #pragma HLS PIPELINE
       }
-      for(int jj = 0; jj < CONFIG_T::n_edge; ii++) {
+      for(int jj = 0; jj < CONFIG_T::n_edge; jj++) {
 	Rwo[ii][jj] = Ro[ii][jj]*e[jj][0];
 	Rwi[ii][jj] = Ri[ii][jj]*e[jj][0];
-	std::cout << "Ro[" << ii << "][" << jj << "] = " << Ro[ii][jj] << std::endl;
-	std::cout << "Ri[" << ii << "][" << jj << "] = " << Ri[ii][jj] << std::endl;
-	std::cout << "Rwo[" << ii << "][" << jj << "] = " << Rwo[ii][jj] << std::endl;
-	std::cout << "Rwi[" << ii << "][" << jj << "] = " << Rwi[ii][jj] << std::endl;
       }
     }
 

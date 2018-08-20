@@ -117,6 +117,13 @@ struct tanh_config3 : nnet::activ_config {
   static const unsigned io_type = nnet::io_parallel;
 };
 
+struct tanh_config4 : nnet::activ_config {
+  static const unsigned n_batch = N_NODES;
+  static const unsigned n_in = N_HIDDEN_FEATURES;
+  static const unsigned table_size = 1024;
+  static const unsigned io_type = nnet::io_parallel;
+};
+
 struct layer_config5 : nnet::layer_config {
   static const unsigned n_batch = N_NODES;
   static const unsigned n_in = N_HIDDEN_FEATURES;
