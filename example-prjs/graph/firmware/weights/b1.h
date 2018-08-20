@@ -3,4 +3,4 @@
 //Max 0.666767776012
 //Number of zeros 0
 
-bias_default_t b1[4] = {1,1,1,1};
+bias_default_t b1[4] = {0.0833,  0.3455,  0.0679, -0.0388};

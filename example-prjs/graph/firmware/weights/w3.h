@@ -3,4 +3,4 @@
 //Max 1.15692543983
 //Number of zeros 797
 
-weight_default_t w3[4] = {1,1,1,1};
+weight_default_t w3[4] = {3.7779, -4.2621,  4.6618, -3.6290};
