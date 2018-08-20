@@ -31,9 +31,20 @@ int main(int argc, char **argv)
 {
 
   //hls-fpga-machine-learning insert data
-  input_t  X_str[N_NODES][N_FEATURES] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-  input_t  Ri_str[N_NODES][N_EDGES] =   {0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1};
-  input_t  Ro_str[N_NODES][N_EDGES] =   {1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0};
+  input_t  X_str[N_NODES][N_FEATURES] = {0.0319,  0.4396,  0.0276, 
+					 0.0713,  0.4137,  0.0631, 
+					 0.0315,  0.7407,  0.0110, 
+					 0.0717,  0.7647,  0.0284};
+
+  input_t  Ri_str[N_NODES][N_EDGES] =   {0,  0,  0,  0, 
+					 1,  0,  1,  0, 
+					 0,  0,  0,  0, 
+					 0,  1,  0,  1};
+
+  input_t  Ro_str[N_NODES][N_EDGES] =   {1,  1,  0,  0, 
+					 0,  0,  0,  0, 
+					 0,  0,  1,  1, 
+					 0,  0,  0,  0};
 
   result_t e_str[N_EDGES][1];
   for(int i=0; i<N_EDGES; i++){
