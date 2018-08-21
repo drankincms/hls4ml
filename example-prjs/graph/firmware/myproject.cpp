@@ -40,8 +40,8 @@
 
 void myproject(
 	       input_t    X[N_NODES][N_FEATURES],
-	       input_t    Ri[N_NODES][N_EDGES],
-	       input_t    Ro[N_NODES][N_EDGES],
+	       ap_uint<1>  Ri[N_NODES][N_EDGES],
+	       ap_uint<1>  Ro[N_NODES][N_EDGES],
 	       result_t   e[N_EDGES][1],
 	       unsigned short &const_size_in,
 	       unsigned short &const_size_out)
@@ -64,16 +64,43 @@ void myproject(
   // ****************************************
   
   //hls-fpga-machine-learning insert layers
-
+  /*
+  std::cout << "X = " << std::endl;
+  for(int i=0; i<N_NODES; i++){
+    for(int j=0; j<N_FEATURES; j++){
+      std::cout << X[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  */
   // input network
   input_t H_logits[N_NODES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=H_logits complete dim=0
   nnet::compute_layer_batch<input_t, input_t, layer_config1>(X, H_logits, w1, b1);
-
+  /*
+  std::cout << "H_logits = " << std::endl;
+  for(int i=0; i<N_NODES; i++){
+    for(int j=0; j<N_HIDDEN_FEATURES; j++){
+      std::cout << H_logits[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  */
   input_t H[N_NODES][N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=H complete dim=0
   nnet::tanh_batch<input_t, input_t, tanh_config1>(H_logits, H);
-
+  /*
+  std::cout << "H = " << std::endl;
+  for(int i=0; i<N_NODES; i++){
+    for(int j=0; j<N_HIDDEN_FEATURES; j++){
+      std::cout << H[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  */
   input_t HX[N_NODES][N_FEATURES+N_HIDDEN_FEATURES];
   #pragma HLS ARRAY_PARTITION variable=HX complete dim=0
   nnet::merge2d<input_t, N_NODES, N_HIDDEN_FEATURES, N_FEATURES>(H, X, HX);
@@ -98,7 +125,14 @@ void myproject(
   input_t e_temp[N_EDGES][1];
   #pragma HLS ARRAY_PARTITION variable=e_temp complete dim=0
   nnet::sigmoid_batch<input_t, input_t, sigmoid_config1>(e_logits_temp, e_temp);
-
+  /*
+  std::cout << "e_temp = " << std::endl;
+  for(int i=0; i<N_EDGES; i++){
+    std::cout << e_temp[i][0] << " ";
+  }
+  std::cout << std::endl;
+  std::cout << std::endl;
+  */
   // node network
   input_t M[N_NODES][3*(N_FEATURES+N_HIDDEN_FEATURES)];
   #pragma HLS ARRAY_PARTITION variable=M complete dim=0
@@ -114,7 +148,16 @@ void myproject(
   nnet::compute_layer_batch<input_t, input_t, layer_config5>(layer4_out, H_logits, w5, b5);    
 
   nnet::tanh_batch<input_t, input_t, tanh_config4>(H_logits, H);
-
+  /*
+  std::cout << "H = " << std::endl;
+  for(int i=0; i<N_NODES; i++){
+    for(int j=0; j<N_HIDDEN_FEATURES; j++){
+      std::cout << H[i][j] << " ";
+    }
+    std::cout << std::endl;
+  }
+  std::cout << std::endl;
+  */
   nnet::merge2d<input_t, N_NODES, N_HIDDEN_FEATURES, N_FEATURES>(H, X, HX);
 
   // edge network 

@@ -30,8 +30,8 @@
 // Prototype of top level function for C-synthesis
 void myproject(
 	       input_t    X[N_NODES][N_FEATURES],
-	       input_t    Ri[N_NODES][N_EDGES],
-	       input_t    Ro[N_NODES][N_EDGES],
+	       ap_uint<1>  Ri[N_NODES][N_EDGES],
+	       ap_uint<1>  Ro[N_NODES][N_EDGES],
 	       result_t   e[N_EDGES][1],
 	       unsigned short &const_size_in,
 	       unsigned short &const_size_out);

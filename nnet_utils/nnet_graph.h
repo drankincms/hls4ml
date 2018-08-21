@@ -51,8 +51,8 @@ namespace nnet {
   template<class data_T, class res_T, typename CONFIG_T>
     void compute_edge_net_features(
 		   data_T    X[CONFIG_T::n_node][CONFIG_T::n_input_dim],
-		   data_T    Ri[CONFIG_T::n_node][CONFIG_T::n_edge],
-		   data_T    Ro[CONFIG_T::n_node][CONFIG_T::n_edge],
+		   ap_uint<1> Ri[CONFIG_T::n_node][CONFIG_T::n_edge],
+		   ap_uint<1> Ro[CONFIG_T::n_node][CONFIG_T::n_edge],
 		   res_T     B[CONFIG_T::n_edge][2*CONFIG_T::n_input_dim])
   {
     data_T bo[CONFIG_T::n_edge][CONFIG_T::n_input_dim];
@@ -82,8 +82,8 @@ namespace nnet {
 	bi[ii][jj] = 0;
 	bo[ii][jj] = 0;
 	for(int kk = 0; kk < CONFIG_T::n_node; kk++) {
-	  bi[ii][jj] += Ri[kk][ii]* X[kk][jj];
-	  bo[ii][jj] += Ro[kk][ii]* X[kk][jj];
+	  bi[ii][jj] += Ri[kk][ii] * X[kk][jj];
+	  bo[ii][jj] += Ro[kk][ii] * X[kk][jj];
 	}
 	// Concatenate M = [bo, bi]
 	B[ii][jj] = (res_T) bo[ii][jj];
@@ -96,8 +96,8 @@ namespace nnet {
     void compute_node_net_features(
 		   data_T    X[CONFIG_T::n_node][CONFIG_T::n_input_dim],
 		   data_T    e[CONFIG_T::n_edge][1],
-		   data_T    Ri[CONFIG_T::n_node][CONFIG_T::n_edge],
-		   data_T    Ro[CONFIG_T::n_node][CONFIG_T::n_edge],
+		   ap_uint<1> Ri[CONFIG_T::n_node][CONFIG_T::n_edge],
+		   ap_uint<1> Ro[CONFIG_T::n_node][CONFIG_T::n_edge],
 		   res_T     M[CONFIG_T::n_node][3*CONFIG_T::n_input_dim])
   {
     data_T bo[CONFIG_T::n_edge][CONFIG_T::n_input_dim];
@@ -140,8 +140,8 @@ namespace nnet {
 	bi[ii][jj] = 0;
 	bo[ii][jj] = 0;
 	for(int kk = 0; kk < CONFIG_T::n_node; kk++) {
-	  bi[ii][jj] += Ri[kk][ii]* X[kk][jj];
-	  bo[ii][jj] += Ro[kk][ii]* X[kk][jj];
+	  bi[ii][jj] += Ri[kk][ii] * X[kk][jj];
+	  bo[ii][jj] += Ro[kk][ii] * X[kk][jj];
 	}
       }
     }
@@ -153,8 +153,8 @@ namespace nnet {
 #pragma HLS PIPELINE
       }
       for(int jj = 0; jj < CONFIG_T::n_edge; jj++) {
-	Rwo[ii][jj] = Ro[ii][jj]*e[jj][0];
-	Rwi[ii][jj] = Ri[ii][jj]*e[jj][0];
+	Rwo[ii][jj] = Ro[ii][jj] * e[jj][0];
+	Rwi[ii][jj] = Ri[ii][jj] * e[jj][0];
       }
     }
 
@@ -170,8 +170,8 @@ namespace nnet {
 	//std::cout << "mi[ii][jj] = " << mi[ii][jj] << std::endl;
 	//std::cout << "mo[ii][jj] = " << mo[ii][jj] << std::endl;
 	for(int kk = 0; kk < CONFIG_T::n_edge; kk++) {
-	  mi[ii][jj] += Rwi[ii][kk]* bo[kk][jj];
-	  mo[ii][jj] += Rwo[ii][kk]* bi[kk][jj];
+	  mi[ii][jj] += Rwi[ii][kk] * bo[kk][jj];
+	  mo[ii][jj] += Rwo[ii][kk] * bi[kk][jj];
 	}
 	// Concatenate M = [mi, mo, X]
 	M[ii][jj] = (res_T) mi[ii][jj];

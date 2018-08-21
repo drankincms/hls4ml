@@ -36,12 +36,12 @@ int main(int argc, char **argv)
 					 0.0315,  0.7407,  0.0110, 
 					 0.0717,  0.7647,  0.0284};
 
-  input_t  Ri_str[N_NODES][N_EDGES] =   {0,  0,  0,  0, 
+  ap_uint<1> Ri_str[N_NODES][N_EDGES] =   {0,  0,  0,  0, 
 					 1,  0,  1,  0, 
 					 0,  0,  0,  0, 
 					 0,  1,  0,  1};
 
-  input_t  Ro_str[N_NODES][N_EDGES] =   {1,  1,  0,  0, 
+  ap_uint<1> Ro_str[N_NODES][N_EDGES] =   {1,  1,  0,  0, 
 					 0,  0,  0,  0, 
 					 0,  0,  1,  1, 
 					 0,  0,  0,  0};
@@ -55,6 +55,7 @@ int main(int argc, char **argv)
   unsigned short size_in, size_out;
   myproject(X_str, Ri_str, Ro_str, e_str, size_in, size_out);
     
+  std::cout << "e = " << std::endl;
   for(int i=0; i<N_EDGES; i++){
     std::cout << e_str[i][0] << " ";
   }
