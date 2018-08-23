@@ -25,11 +25,11 @@ typedef ap_fixed<16,6> result_t;
 #define N_FEATURES 3
 #define N_HIDDEN_FEATURES 4
 //2x2 example:
-#define N_NODES 4
-#define N_EDGES 4
+//#define N_NODES 4
+//#define N_EDGES 4
 //3x3 example:
-//#define N_NODES 9
-//#define N_EDGES 18
+#define N_NODES 9
+#define N_EDGES 18
 
 //hls-fpga-machine-learning insert layer-config
 struct graph_config1 : nnet::graph_config {

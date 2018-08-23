@@ -31,11 +31,11 @@ hidden_dim = 4
 n_iters = 1
 model = SegmentClassifier(input_dim=n_features, hidden_dim=hidden_dim, n_iters=n_iters)
 estim = Estimator(model, loss_func=nn.BCELoss(), cuda=cuda, l1= 0)
-#estim.load_checkpoint('model_3_1iteration.pt')
-estim.load_checkpoint('model_1iteration.pt')
+estim.load_checkpoint('model_3_1iteration.pt')
+#estim.load_checkpoint('model_1iteration.pt')
 
-#graph = load_graphs(['graph000001_3.npz'], SparseGraph)
-graph = load_graphs(['graph000001.npz'], SparseGraph)
+graph = load_graphs(['graph000001_3.npz'], SparseGraph)
+#graph = load_graphs(['graph000001.npz'], SparseGraph)
 
 g = graph[0]
 g = graph_from_sparse(g)
