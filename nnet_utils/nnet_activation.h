@@ -175,8 +175,17 @@ void  sigmoid(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_in])
 template<class data_T, class res_T, typename CONFIG_T>
 void  sigmoid_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFIG_T::n_batch][CONFIG_T::n_in])
 {
+  data_T data_temp[CONFIG_T::n_in];
+  res_T res_temp[CONFIG_T::n_in];
+
   for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-    sigmoid<data_T, res_T, CONFIG_T>(data[bb], res[bb]);
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
+      data_temp[ii] = data[bb][ii];
+    }
+    sigmoid<data_T, res_T, CONFIG_T>(data_temp, res_temp);
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
+      res[bb][ii] = res_temp[ii];
+    }
   }
 }
 
@@ -339,9 +348,18 @@ void  tanh(data_T data[CONFIG_T::n_in], res_T res[CONFIG_T::n_in])
 template<class data_T, class res_T, typename CONFIG_T>
 void  tanh_batch(data_T data[CONFIG_T::n_batch][CONFIG_T::n_in], res_T res[CONFIG_T::n_batch][CONFIG_T::n_in])
 {
-    for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
-      tanh<data_T, res_T, CONFIG_T>(data[bb], res[bb]);
+  data_T data_temp[CONFIG_T::n_in];
+  res_T res_temp[CONFIG_T::n_in];
+
+  for (int bb=0; bb<CONFIG_T::n_batch; bb++) {
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
+      data_temp[ii] = data[bb][ii];
     }
+    tanh<data_T, res_T, CONFIG_T>(data_temp, res_temp);
+    for (int ii=0; ii<CONFIG_T::n_in; ii++) {
+      res[bb][ii] = res_temp[ii];
+    }
+  }
 }
 }
 
