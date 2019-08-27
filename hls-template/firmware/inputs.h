@@ -1,5 +1,7 @@
 #include "parameters.h"
+#include "defines.h"
 
-ap_uint<32> input_vals[N_INPUTS*STREAMSIZE] = {
+ap_uint<PACKET_DATA_LENGTH> input_vals[N_INPUTS*STREAMSIZE] = {
 //hls-fpga-machine-learning insert input data
+
 };

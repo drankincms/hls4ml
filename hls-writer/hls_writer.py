@@ -3,9 +3,12 @@ import tarfile
 import yaml
 from shutil import copyfile
 import numpy as np
+import random as rand
 import os
 import re
 from collections import OrderedDict
+
+rand.seed(47)
 
 #######################################
 ## Config module
@@ -206,17 +209,16 @@ def write_galapagos_inputs(model):
     fout = open('{}/firmware/inputs.h'.format(model.config.get_output_dir()),'w')
 
     for line in f.readlines():
-        if 'N_INPUTS' in line:
+        if '//hls-fpga-machine-learning insert input data' in line:
+            newline = line + '    ' + (',\n    '.join(','.join(str(hex(int(rand.getrandbits(32)))) for i in range(model.get_input_variables()[0].size())) for j in range(model.get_streamsize())))
+
+        elif 'N_INPUTS' in line:
             newline = line.replace('N_INPUTS', model.get_input_variables()[0].size_cpp())
-
-        elif 'N_OUTPUTS' in line:
-            newline = line.replace('N_OUTPUTS', model.get_output_variables()[0].size_cpp())
-
-        #Just copy line
+            
         else:
             newline = line
 
-        fout.write(newline)
+        fout.write(newline)    
 
     f.close()
     fout.close()
