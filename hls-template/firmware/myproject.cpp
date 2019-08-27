@@ -20,11 +20,11 @@
 
 #include "myproject.h"
 
-//hls-fpga-machine-learning insert weights
-
 void myproject(
 	//hls-fpga-machine-learning insert header
 ) {
+
+    //hls-fpga-machine-learning insert weights
 
     //hls-fpga-machine-learning insert IO
 

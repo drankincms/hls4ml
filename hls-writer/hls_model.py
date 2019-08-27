@@ -16,6 +16,7 @@ class HLSConfig(object):
         self.layer_name_precision = {}
 
         self.model_rf = None
+        self.model_streamsize = None
         self.layer_type_rf = {}
         self.layer_name_rf = {}
 
@@ -29,6 +30,9 @@ class HLSConfig(object):
 
     def get_output_dir(self):
         return self.get_config_value('OutputDir')
+
+    def get_streamsize(self):
+        return self.get_config_value('StreamSize')
 
     def get_precision(self, layer, var='default'):
         precision = self.layer_name_precision.get(layer.name.lower() + '_' + var)
@@ -119,6 +123,8 @@ class HLSModel(object):
         self.inputs = inputs if inputs is not None else [layer_list[0]['name']]
         self.outputs = outputs if outputs is not None else [layer_list[-1]['name']]
 
+        self.streamsize = 1
+
         self.index = 0
         self.graph = OrderedDict()
         self.output_vars = {}
@@ -142,6 +148,9 @@ class HLSModel(object):
     def get_weights_data(self, layer_name, var_name):
         return self.reader.get_weights_data(layer_name, var_name)
 
+    def get_streamsize(self):
+        return self.config.get_streamsize()
+
     def quantize_data(self, data, quantize):
         ones = np.ones_like(data)
         quant_data = data
@@ -155,6 +164,9 @@ class HLSModel(object):
     def next_layer(self):
         self.index += 1
         return self.index
+
+    def get_precision(self):
+        return self.config.get_precision()
 
     def get_layers(self):
         return self.graph.values()
@@ -227,6 +239,10 @@ class ArrayVariable(Variable):
     def definition_cpp(self):
         array_shape = '*'.join([str(k) for k in self.dim_names])
         return '{type} {name}[{shape}]'.format(type=self.type, name=self.cppname, shape=array_shape)
+
+    def input_size_name(self):
+        array_shape = '*'.join([str(k) for k in self.dim_names])
+        return '{shape}'.format(shape=array_shape)
 
     def size(self):
         nelem = 1
