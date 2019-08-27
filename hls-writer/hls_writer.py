@@ -104,6 +104,7 @@ def write_project_cpp(model):
                 #for o in model_outputs: newline += indent + '#pragma HLS ARRAY_RESHAPE variable={} complete dim=0 \n'.format(o.cppname)
                 #newline += indent + '#pragma HLS INTERFACE ap_vld port={},{} \n'.format(','.join(all_inputs), ','.join(all_outputs))
                 newline += indent + '#pragma HLS PIPELINE \n'
+                newline += indent + '#pragma HLS INLINE \n'
             if model.config.get_config_value("IOType") == "io_serial":
                 newline += indent + '#pragma HLS INTERFACE axis port={},{} \n'.format(','.join(all_inputs), ','.join(all_outputs))
                 newline += indent + '#pragma HLS DATAFLOW \n'
