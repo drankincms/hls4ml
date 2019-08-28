@@ -241,14 +241,6 @@ def write_galapagos_cpp(model):
         if 'myproject' in line:
             newline = line.replace('myproject', model.config.get_project_name())
 
-        elif 'GAL_FAC' in line:
-            gal_fac = 0
-            for layer in model.get_layers():
-                gal_fac = gal_fac+(model.config.get_reuse_factor(layer)+1)
-                if 'softmax' in layer.name:
-                    gal_fac = gal_fac + 5
-            newline = line.replace('GAL_FAC', str(1+int(gal_fac/int(model.get_input_variables()[0].size()))))
-
         elif 'N_INPUTS' in line:
             newline = line.replace('N_INPUTS', model.get_input_variables()[0].size_cpp())
 
