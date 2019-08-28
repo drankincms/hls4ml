@@ -77,8 +77,6 @@ void kern_nn(
     result_t out_buf[STREAMSIZE][N_OUTPUTS];
     #pragma HLS ARRAY_PARTITION variable=in_buf complete dim=2
     #pragma HLS ARRAY_PARTITION variable=out_buf complete dim=2 
-    #pragma HLS ARRAY_PARTITION variable=in_buf cyclic factor=GAL_FAC dim=1
-    #pragma HLS ARRAY_PARTITION variable=out_buf cyclic factor=GAL_FAC dim=1 
 
     //reading: while(!last){
     reading: for (int i = 0; i < STREAMSIZE; i++) {
