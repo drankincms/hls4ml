@@ -45,9 +45,6 @@ def keras_to_hls(yamlConfig):
     ##  Do translation
     ######################
 
-    if not os.path.isdir("{}/middlewareInput/conf_oneFPGA".format(yamlConfig['OutputDir'])):
-        os.makedirs("{}/middlewareInput/conf_oneFPGA".format(yamlConfig['OutputDir']))
-
     #This is a list of dictionaries to hold all the layer info we need to generate HLS
     layer_list = []
 
