@@ -440,6 +440,90 @@ def write_galapagos_nn_build_script(model):
     f.close()
     fout.close()
 
+def write_galapagos_cpu_node(model):
+    ###################
+    # cpu_node.cpp
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../hls-template/cpu_node.cpp'),'r')
+    fout = open('{}/cpu_node.cpp'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        fout.write(line)
+
+    f.close()
+    fout.close()
+
+def write_galapagos_heterogeneous_node(model):
+    ###################
+    # heterogeneous_node.cpp
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../hls-template/heterogeneous_node.cpp'),'r')
+    fout = open('{}/heterogeneous_node.cpp'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        fout.write(line)
+
+    f.close()
+    fout.close()
+
+def write_galapagos_program_fpga(model):
+    ###################
+    # program_fpga.tcl 
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../hls-template/program_fpga.tcl'),'r')
+    fout = open('{}/program_fpga.tcl'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        line = line.replace('GALAPAGOS_DIR',model.config.get_galapagos_dir())
+
+        fout.write(line)
+    f.close()
+    fout.close()
+
+def write_galapagos_logical_xml(model):
+    ###################
+    # logical.xml
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../hls-template/middlewareInput/conf_oneFPGA/logical.xml'),'r')
+    fout = open('{}/middlewareInput/conf_oneFPGA/logical.xml'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        fout.write(line)
+    f.close()
+    fout.close()
+
+def write_galapagos_map_xml(model):
+    ###################
+    # map.xml
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../hls-template/middlewareInput/conf_oneFPGA/map.xml'),'r')
+    fout = open('{}/middlewareInput/conf_oneFPGA/map.xml'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        fout.write(line)
+    f.close()
+    fout.close()
+
 def write_tar(model):
     ###################
     # Tarball output
@@ -462,4 +546,9 @@ def write_hls(model):
     write_galapagos_inputs(model)
     write_galapagos_send_build_script(model)
     write_galapagos_nn_build_script(model)
+    write_galapagos_heterogeneous_node(model)
+    write_galapagos_cpu_node(model)
+    write_galapagos_program_fpga(model)
+    write_galapagos_logical_xml(model)
+    write_galapagos_map_xml(model)
     write_tar(model)

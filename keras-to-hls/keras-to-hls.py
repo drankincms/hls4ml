@@ -77,6 +77,9 @@ def main():
     if not os.path.isdir("{}/firmware/weights".format(yamlConfig['OutputDir'])):
         os.makedirs("{}/firmware/weights".format(yamlConfig['OutputDir']))
 
+    if not os.path.isdir("{}/middlewareInput/conf_oneFPGA".format(yamlConfig['OutputDir'])):
+        os.makedirs("{}/middlewareInput/conf_oneFPGA".format(yamlConfig['OutputDir']))
+
     #This is a list of dictionaries to hold all the layer info we need to generate HLS
     layer_list = []
 

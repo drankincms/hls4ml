@@ -17,6 +17,7 @@ class HLSConfig(object):
 
         self.model_rf = None
         self.model_streamsize = None
+        self.galapagos_dir = None
         self.layer_type_rf = {}
         self.layer_name_rf = {}
 
@@ -33,6 +34,9 @@ class HLSConfig(object):
 
     def get_streamsize(self):
         return self.get_config_value('StreamSize')
+
+    def get_galapagos_dir(self):
+        return self.get_config_value('GalapagosDir')
 
     def get_precision(self, layer, var='default'):
         precision = self.layer_name_precision.get(layer.name.lower() + '_' + var)
@@ -124,6 +128,7 @@ class HLSModel(object):
         self.outputs = outputs if outputs is not None else [layer_list[-1]['name']]
 
         self.streamsize = 1
+        self.galapagos_dir = ""
 
         self.index = 0
         self.graph = OrderedDict()
@@ -150,6 +155,9 @@ class HLSModel(object):
 
     def get_streamsize(self):
         return self.config.get_streamsize()
+
+    def get_galapagos_dir(self):
+        return self.config.get_galapagos_dir()
 
     def quantize_data(self, data, quantize):
         ones = np.ones_like(data)
