@@ -43,5 +43,5 @@ cpu_node.exe: myproject.o galapagos_kerns.o cpu_node.cpp
 	$(CXX) $(CXXFLAGS) -I$(SRC_LIB) -I$(GALAPAGOS_PATH)/util/argparse $^ -o $@ $(BOOST_LDFLAGS)  
 
 clean:
-	rm -rf *.o myproject_prj
+	rm -rf $(GALAPAGOS_PATH)/hlsBuild/$(GALAPAGOS_BOARD_NAME)/ip/myproject_prj
 	rm -rf *.exe 
