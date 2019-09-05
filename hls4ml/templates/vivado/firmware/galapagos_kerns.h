@@ -3,7 +3,7 @@
 
 #include "parameters.h"
 
-#ifndef CPU
+#ifdef CPU
 #include "galapagos_stream.hpp"
 #else
 #include "galapagos_packet.h"
