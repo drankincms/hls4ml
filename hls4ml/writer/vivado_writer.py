@@ -342,6 +342,17 @@ def write_test_bench(model):
                 output_str = '    ' + out.definition_cpp() + ' = {};\n'
                 default_val = ','.join(str(o) for o in [0] * out.size())
                 newline += output_str.format('{' + default_val + '}')
+            newline = newline + '\n' + indent + '#include "firmware/defines.h"'
+            newline = newline + '\n' + indent + '#include "firmware/inputs.h"'
+
+            newline = newline + '\n' + indent + 'for(int i = 0; i < STREAMSIZE; i++) {'
+            newline = newline + '\n' + indent + '  std::cout <<"******************************" << std::endl << "Input:" << std::endl << std::endl;'
+            for inp in model.get_input_variables():
+              newline = newline + '\n' + indent + '  for(int j = 0; j < {}; j++) {{'.format(inp.size_cpp())
+              newline = newline + '\n' + indent + '    {}[j]({}[j].length()-1,0) = input_vals[i*{}+j]({}[j].length()-1,0);'.format(inp.cppname, inp.cppname, inp.size_cpp(), inp.cppname)
+              newline = newline + '\n' + indent + '    std::cout <<"int[" << std::dec << j << "]: " << std::hex << input_vals[i*{}+j] << std::endl;'.format(inp.size_cpp())
+              newline = newline + '\n' + indent + '  }'
+
         elif '//hls-fpga-machine-learning insert top-level-function' in line:
             newline = line
 
@@ -352,7 +363,7 @@ def write_test_bench(model):
 
             input_vars = ','.join([i.cppname for i in model.get_input_variables()])
             output_vars = ','.join([o.cppname for o in model.get_output_variables()])
-            top_level = indent + '{}({},{});\n'.format(model.config.get_project_name(), input_vars, output_vars)
+            top_level = indent + '  {}({},{});\n'.format(model.config.get_project_name(), input_vars, output_vars)
             newline += top_level
         elif '//hls-fpga-machine-learning insert predictions' in line:
             newline = line
@@ -368,7 +379,18 @@ def write_test_bench(model):
                 newline += indent + '  fout << {}[i] << " ";\n'.format(out.cppname)
                 newline += indent + '}\n'
                 newline += indent + 'fout << std::endl;\n'
-        elif '//hls-fpga-machine-learning insert output' in line or '//hls-fpga-machine-learning insert quantized' in line:
+        elif '//hls-fpga-machine-learning insert output' in line:
+            newline = line
+            newline = newline + '\n' + indent + '  std::cout <<"******************************" << std::endl << "Output:" << std::endl << std::endl;\n'
+            for out in model.get_output_variables():
+                newline += indent + '  for(int j = 0; j < {}; j++) {{\n'.format(out.size_cpp())
+                newline += indent + '    ap_uint<PACKET_DATA_LENGTH> tmpout; tmpout({}[j].length()-1,0) = {}[j]({}[j].length()-1,0);\n'.format(out.cppname, out.cppname, out.cppname)
+                #newline += indent + '  std::cout << {}[i] << " ";\n'.format(out.cppname)
+                newline += indent + '    std::cout <<"out[" << std::dec << j << "]: " << std::hex << tmpout << std::endl;\n'
+                newline += indent + '  }\n'
+                newline += indent + '}\n'
+                newline += indent + 'std::cout << std::endl;\n'
+        elif '//hls-fpga-machine-learning insert quantized' in line:
             newline = line
             for out in model.get_output_variables():
                 newline += indent + 'for(int i = 0; i < {}; i++) {{\n'.format(out.size_cpp())
