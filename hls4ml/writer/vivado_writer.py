@@ -543,6 +543,22 @@ def write_galapagos_map_xml(model):
     f.close()
     fout.close()
 
+def write_galapagos_make(model):
+    ###################
+    ## Makefile
+    ###################
+
+    filedir = os.path.dirname(os.path.abspath(__file__))
+
+    f = open(os.path.join(filedir,'../templates/vivado/Makefile'),'r')
+    fout = open('{}/Makefile'.format(model.config.get_output_dir()),'w')
+
+    for line in f.readlines():
+
+        fout.write(line)
+    f.close()
+    fout.close()
+
 def write_nnet_utils(model):
     ###################
     ## nnet_utils
@@ -590,6 +606,7 @@ def write_hls(model):
     write_galapagos_program_fpga(model)
     write_galapagos_logical_xml(model)
     write_galapagos_map_xml(model)
+    write_galapagos_make(model)
     write_nnet_utils(model)
     write_tar(model)
     print('Done')
