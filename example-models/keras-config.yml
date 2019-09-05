@@ -2,7 +2,7 @@ KerasJson: example-models/keras/KERAS_3layer.json
 KerasH5:   example-models/keras/KERAS_3layer_weights.h5
 #InputData: keras/KERAS_3layer_input_features.dat
 #OutputPredictions: keras/KERAS_3layer_predictions.dat
-OutputDir: my-hls-test1
+OutputDir: my-hls-test
 StreamSize: 2
 GalapagosDir: /home/drankin/testing/galapagos
 ProjectName: myproject
