@@ -5,7 +5,7 @@ set src_path_root [pwd]
 
 cd $galapagos_path/hlsBuild/${board_name}/ip
 
-open_project kern_send
+open_project -reset kern_send
 set_top kern_send
 open_solution "solution1"
 set_part ${part_name}
