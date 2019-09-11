@@ -229,9 +229,29 @@ def write_galapagos_cpp(model):
 
         elif 'N_INPUTS' in line:
             newline = line.replace('N_INPUTS', model.get_input_variables()[0].size_cpp())
+            if 'input_t' in newline:
+                newline = newline.replace('input_t', model.get_input_variables()[0].type_name())
 
         elif 'N_OUTPUTS' in line:
             newline = line.replace('N_OUTPUTS', model.get_output_variables()[0].size_cpp())
+            if 'result_t' in newline:
+                newline = newline.replace('result_t', model.get_output_variables()[0].type_name())
+
+        elif 'IN_BITS' in line:
+            bit_width = 32
+            for inp in model.get_input_variables():
+                layer_precision = inp.get_precision()
+                bit_width = layer_precision[layer_precision.find("<")+len("<"):layer_precision.rfind(">")]
+                bit_width = bit_width.split(",")[0]
+            newline = line.replace('IN_BITS',bit_width)
+
+        elif 'OUT_BITS' in line:
+            bit_width = 32
+            for outp in model.get_output_variables():
+                layer_precision = outp.get_precision()
+                bit_width = layer_precision[layer_precision.find("<")+len("<"):layer_precision.rfind(">")]
+                bit_width = bit_width.split(",")[0]
+            newline = line.replace('OUT_BITS',bit_width)
 
         #Just copy line
         else:
@@ -577,6 +597,7 @@ def write_galapagos_make(model):
 
     for line in f.readlines():
 
+        line = line.replace('myproject',model.config.get_project_name())
         fout.write(line)
     f.close()
     fout.close()

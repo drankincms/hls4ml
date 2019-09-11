@@ -39,7 +39,7 @@ void kern_send(short id, galapagos_stream * in, galapagos_stream  * out)
     for(int j=0; j<num_flits; j++){
         gp.dest = 1; // FIRST
         gp.data = 0;
-        (gp.data)(input_vals[j].length()-1,0) = input_vals[j];
+        (gp.data)(IN_BITS-1,0) = input_vals[j];
         if(j==(num_flits -1))
             gp.last = 1;
         else
@@ -127,7 +127,7 @@ void kern_nn(
         for (int j = 0; j < N_INPUTS; j++) {
             gp = in->read();
             //last = gp.last;
-            in_buf[i][j](in_buf[i][j].length()-1,0) = (gp.data)(in_buf[i][j].length()-1,0);
+            in_buf[i][j](IN_BITS-1,0) = (gp.data)(IN_BITS-1,0);
         }
     
         hls4ml: myproject(in_buf[i],out_buf[i]);
@@ -139,7 +139,7 @@ void kern_nn(
     writing: for (int i = 0; i < STREAMSIZE; i++) {
         for (int j = 0; j < N_OUTPUTS; j++) {
             gp.data = 0;
-            (gp.data)(out_buf[i][j].length()-1,0) = out_buf[i][j](out_buf[i][j].length()-1,0);
+            (gp.data)(OUT_BITS-1,0) = out_buf[i][j](OUT_BITS-1,0);
             gp.dest = dest;
             gp.last = (i==STREAMSIZE-1 && j==N_OUTPUTS-1 ? 1 : 0);
             gp.id = 1;

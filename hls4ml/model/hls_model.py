@@ -400,6 +400,9 @@ class ArrayVariable(Variable):
         array_shape = self.size_cpp()
         return '{type} {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape)
 
+    def type_name(self):
+        return self.type.name
+
     def input_size_name(self):
         array_shape = '*'.join([str(k) for k in self.dim_names])
         return '{shape}'.format(shape=array_shape)
@@ -412,6 +415,9 @@ class ArrayVariable(Variable):
 
     def size_cpp(self):
         return '*'.join([str(k) for k in self.dim_names])
+
+    def get_precision(self):
+        return self.type.precision
 
 class WeightVariable(Variable):
     def __init__(self, var_name, type_name, precision, data, **kwargs):
