@@ -16,15 +16,16 @@
 //    You should have received a copy of the GNU General Public License
 //    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
+#include <cstddef>
 #include <iostream>
 
 #include "myproject.h"
 
-//hls-fpga-machine-learning insert weights
-
 void myproject(
 	//hls-fpga-machine-learning insert header
 ) {
+
+    //hls-fpga-machine-learning insert weights
 
     //hls-fpga-machine-learning insert IO
 

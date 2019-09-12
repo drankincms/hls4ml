@@ -16,6 +16,8 @@ class HLSConfig(object):
         self.layer_name_precision = {}
 
         self.model_rf = None
+        self.model_streamsize = None
+        self.galapagos_dir = None
         self.layer_type_rf = {}
         self.layer_name_rf = {}
 
@@ -38,6 +40,12 @@ class HLSConfig(object):
 
     def get_output_dir(self):
         return self.get_config_value('OutputDir')
+
+    def get_streamsize(self):
+        return self.get_config_value('StreamSize')
+
+    def get_galapagos_dir(self):
+        return self.get_config_value('GalapagosDir')
 
     def get_precision(self, layer, var='default'):
         precision = self.layer_name_precision.get(layer.name.lower() + '_' + var)
@@ -196,6 +204,9 @@ class HLSModel(object):
         self.inputs = inputs if inputs is not None else [layer_list[0]['name']]
         self.outputs = outputs if outputs is not None else [layer_list[-1]['name']]
 
+        self.streamsize = 1
+        self.galapagos_dir = ""
+
         self.index = 0
         self.graph = OrderedDict()
         self.output_vars = {}
@@ -276,6 +287,12 @@ class HLSModel(object):
     def get_weights_data(self, layer_name, var_name):
         return self.reader.get_weights_data(layer_name, var_name)
 
+    def get_streamsize(self):
+        return self.config.get_streamsize()
+
+    def get_galapagos_dir(self):
+        return self.config.get_galapagos_dir()
+
     def quantize_data(self, data, quantize):
         zeros = np.zeros_like(data)
         ones = np.ones_like(data)
@@ -291,6 +308,9 @@ class HLSModel(object):
     def next_layer(self):
         self.index += 1
         return self.index
+
+    def get_precision(self):
+        return self.config.get_precision()
 
     def get_layers(self):
         return self.graph.values()
@@ -383,6 +403,13 @@ class ArrayVariable(Variable):
         array_shape = self.size_cpp()
         return '{type} {name}[{shape}]'.format(type=self.type.name, name=self.cppname, shape=array_shape)
 
+    def type_name(self):
+        return self.type.name
+
+    def input_size_name(self):
+        array_shape = '*'.join([str(k) for k in self.dim_names])
+        return '{shape}'.format(shape=array_shape)
+
     def size(self):
         nelem = 1
         for dim in self.shape:
@@ -391,6 +418,9 @@ class ArrayVariable(Variable):
 
     def size_cpp(self):
         return '*'.join([str(k) for k in self.dim_names])
+
+    def get_precision(self):
+        return self.type.precision
 
 class WeightVariable(Variable):
     def __init__(self, var_name, type_name, precision, data, **kwargs):
